@@ -181,7 +181,7 @@ resource blobContainers 'Microsoft.Storage/storageAccounts/blobServices/containe
   'virtualmachinepatchs'
   'virtualnetworks'
 ]: {
-  name: '${sa.name}/default/${containerName}'
+  name: '${dataLakeStorage.name}/default/${containerName}'
   properties: {
     publicAccess: 'Container'
   }
@@ -223,7 +223,7 @@ module roleAssignment1 'br/public:avm/ptn/authorization/resource-role-assignment
   name: '${name}-storage-ra'
   params: {
     name: guid(name, 'Contributor')
-    principalId: appService.outputs.?systemAssignedMIPrincipalId
+    principalId: appService.outputs.systemAssignedMIPrincipalId!
     roleName: 'Contributor'
     roleDefinitionId: '/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c' // Contributor role
     principalType: 'ServicePrincipal'
@@ -235,7 +235,7 @@ module roleAssignment2 'br/public:avm/ptn/authorization/resource-role-assignment
   name: '${name}-storage-ra'
   params: {
     name: guid(resourceGroup().id, 'StorageBlobDataContributor')
-    principalId: appService.outputs.?systemAssignedMIPrincipalId
+    principalId: appService.outputs.systemAssignedMIPrincipalId!
     roleName: 'Contributor'
     roleDefinitionId: '/providers/Microsoft.Authorization/roleDefinitions/ba92f5b4-2d11-453d-a403-e96b0029c9fe' // Storage Blob Data Contributor role
     principalType: 'ServicePrincipal'
