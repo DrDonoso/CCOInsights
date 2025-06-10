@@ -134,7 +134,7 @@ module dataLakeStorage 'br/public:avm/res/storage/storage-account:0.20.0' = {
 
 // Blob Containers (native Bicep as AVM module not available)
 resource sa 'Microsoft.Storage/storageAccounts@2022-09-01' existing = {
-  name: dataLakeStorage.name
+  name: dataLakeStorage.outputs.name
 }
 
 resource blobContainers 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = [for containerName in [
