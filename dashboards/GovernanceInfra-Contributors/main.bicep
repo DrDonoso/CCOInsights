@@ -235,7 +235,7 @@ module roleAssignment1 'br/public:avm/ptn/authorization/resource-role-assignment
 }
  
 module roleAssignment2 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.2' = {
-  name: '${name}-storage-ra'
+  name: '${name}-storage-ra2'
   params: {
     name: guid(resourceGroup().id, 'StorageBlobDataContributor')
     principalId: appService.outputs.?systemAssignedMIPrincipalId!
