@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.29.47.4906",
-      "templateHash": "10369953641572536249"
+      "templateHash": "4997576211735561459"
     }
   },
   "parameters": {
@@ -28572,7 +28572,7 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
-      "name": "[format('{0}-storage-ra', parameters('name'))]",
+      "name": "[format('{0}-storage-ra2', parameters('name'))]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
