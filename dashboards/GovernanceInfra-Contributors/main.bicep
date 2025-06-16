@@ -201,12 +201,15 @@ resource storageBlobDataContributorRoleDefinition 'Microsoft.Authorization/roleD
 // Role Assignments
 resource roleAssignment1 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
   name: guid(name, 'roleassignment')
-  scope: sa
+  scope: sa.id
   properties: {
     principalId: appService.outputs.?systemAssignedMIPrincipalId!
     principalType: 'ServicePrincipal'
     roleDefinitionId: contributorRoleDefinition.id
   }
+  dependsOn: [
+    sa
+  ]
 }
 
 resource roleAssignment2 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
