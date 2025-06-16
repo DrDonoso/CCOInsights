@@ -245,3 +245,6 @@ module roleAssignment2 'br/public:avm/ptn/authorization/resource-role-assignment
     resourceId: dataLakeStorage.outputs.resourceId
   }
 }
+
+// Outputs
+output dataLakeStorageAccountName string = dataLakeStorage.outputs.name
