@@ -30,10 +30,7 @@ module storage 'br/public:avm/res/storage/storage-account:0.20.0' = {
     name: toLower('${name}ccost')
     location: location
     skuName: 'Standard_LRS'
-    networkAcls: {
-      bypass: 'AzureServices, Logging, Metrics'
-      defaultAction: 'Deny'
-    }
+    publicNetworkAccess: 'Enabled'
     tags: {
       version: version
     }
@@ -121,11 +118,7 @@ module dataLakeStorage 'br/public:avm/res/storage/storage-account:0.20.0' = {
     location: location
     enableHierarchicalNamespace: true
     skuName: 'Standard_LRS'
-    allowBlobPublicAccess: true
-    networkAcls: {
-      bypass: 'AzureServices, Logging, Metrics'
-      defaultAction: 'Deny'
-    }
+    publicNetworkAccess: 'Enabled'
     tags: {
       version: version
     }
