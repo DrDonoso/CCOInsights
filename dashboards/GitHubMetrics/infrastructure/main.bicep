@@ -84,7 +84,7 @@ module appService 'br/public:avm/res/web/site:0.16.0' = {
         ]
         supportCredentials: false
       }
-      linuxFxVersion: 'DOCKER|${registry.outputs.loginServer}/cco-gh-app:latest'
+      linuxFxVersion: 'DOCKER|mcr.microsoft.com/appsvc/staticsite:latest'
       minTlsVersion: '1.2'
     }
     configs: [
