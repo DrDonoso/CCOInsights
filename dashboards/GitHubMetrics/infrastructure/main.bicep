@@ -16,6 +16,9 @@ module registry 'br/public:avm/res/container-registry/registry:0.9.1' = {
     name: toLower('${name}ccoregistry')
     acrSku: 'Standard'
     location: location
+    tags: {
+      version: version
+    }
   }
 }
 
@@ -61,7 +64,7 @@ module appInsights 'br/public:avm/res/insights/component:0.6.0' = {
 }
 
 
-// Function App
+// Web App
 module appService 'br/public:avm/res/web/site:0.16.0' = {
   name: '${name}-cco-gh-app'
   params: {
@@ -76,27 +79,25 @@ module appService 'br/public:avm/res/web/site:0.16.0' = {
     siteConfig: {
       alwaysOn: true
       use32BitWorkerProcess: false
-      minimumElasticInstanceCount: 1
-      functionAppScaleLimit: 200
-      netFrameworkVersion: 'v8.0'
+      linuxFxVersion: 'DOCKER|${registry.outputs.loginServer}/github-metrics:latest'
+      minTlsVersion: '1.2'
+      acrUseManagedIdentityCreds: true
       cors: {
         allowedOrigins: [
           'https://portal.azure.com'
         ]
         supportCredentials: false
-      }
-      linuxFxVersion: 'DOCKER|${registry.outputs.loginServer}/github-metrics:latest'
-      minTlsVersion: '1.2'
-    }
+      }    }
     configs: [
       {
         name: 'appsettings'
         properties: {
-          FUNCTIONS_EXTENSION_VERSION: '~4'
-          FUNCTIONS_WORKER_RUNTIME: 'dotnet-isolated'
-          WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED: '1'
+          APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.outputs.connectionString
+          ApplicationInsightsAgent_EXTENSION_VERSION: '~3'
+          STORAGE_ACCOUNT_NAME: dataLakeStorage.outputs.name
+          ACR_LOGIN_SERVER: registry.outputs.loginServer
+          WEBSITE_ENABLE_SYNC_UPDATE_SITE: 'true'
         }
-        applicationInsightResourceId: appInsights.outputs.resourceId
       }
     ]
     httpsOnly: true
@@ -144,31 +145,6 @@ module storageTableRoleAssignment 'br/public:avm/ptn/authorization/resource-role
     resourceId: dataLakeStorage.outputs.resourceId
   }
 }
-
-// module roleAssignment1 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.2' = {
-//   name: '${name}-storage-ra'
-//   params: {
-//     name: guid(name, 'Contributor')
-//     principalId: appService.outputs.?systemAssignedMIPrincipalId!
-//     roleName: 'Contributor'
-//     roleDefinitionId: '/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c' // Contributor role
-//     principalType: 'ServicePrincipal'
-//     resourceId: dataLakeStorage.outputs.resourceId
-//   }
-// }
- 
-// module roleAssignment2 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.2' = {
-//   name: '${name}-storage-ra2'
-//   params: {
-//     name: guid(resourceGroup().id, 'StorageBlobDataContributor')
-//     principalId: appService.outputs.?systemAssignedMIPrincipalId!
-//     roleName: 'Contributor'
-//     roleDefinitionId: '/providers/Microsoft.Authorization/roleDefinitions/ba92f5b4-2d11-453d-a403-e96b0029c9fe' // Storage Blob Data Contributor role
-//     principalType: 'ServicePrincipal'
-//     resourceId: dataLakeStorage.outputs.resourceId
-//   }
-// }
-
 
 // Outputs
 output registryLoginServer string = registry.outputs.loginServer
