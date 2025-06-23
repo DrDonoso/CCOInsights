@@ -96,7 +96,6 @@ jobs:
           enable-AzPSSession: true
 
       - name: Create Resource Group
-        shell: pwsh
         id: rg
         run: |
           $resourceGroupName = "${{ inputs.resourceGroupName }}"
