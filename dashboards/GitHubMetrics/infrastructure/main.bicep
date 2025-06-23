@@ -121,6 +121,30 @@ module dataLakeStorage 'br/public:avm/res/storage/storage-account:0.20.0' = {
   }
 }
 
+// ACR Role Assignment - Allow Web App to pull images
+module acrRoleAssignment 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.2' = {
+  name: '${name}-acr-pull-ra'
+  params: {
+    name: guid(registry.outputs.resourceId, appService.outputs.systemAssignedMIPrincipalId!, 'AcrPull')
+    principalId: appService.outputs.systemAssignedMIPrincipalId!
+    roleDefinitionId: '/providers/Microsoft.Authorization/roleDefinitions/7f951dda-4ed3-4680-a7ca-43fe172d538d' // AcrPull role
+    principalType: 'ServicePrincipal'
+    resourceId: registry.outputs.resourceId
+  }
+}
+
+// Storage Table Role Assignment - Allow Web App to read/write table data
+module storageTableRoleAssignment 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.2' = {
+  name: '${name}-storage-table-ra'
+  params: {
+    name: guid(dataLakeStorage.outputs.resourceId, appService.outputs.systemAssignedMIPrincipalId!, 'StorageTableDataContributor')
+    principalId: appService.outputs.systemAssignedMIPrincipalId!
+    roleDefinitionId: '/providers/Microsoft.Authorization/roleDefinitions/0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3' // Storage Table Data Contributor role
+    principalType: 'ServicePrincipal'
+    resourceId: dataLakeStorage.outputs.resourceId
+  }
+}
+
 // module roleAssignment1 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.2' = {
 //   name: '${name}-storage-ra'
 //   params: {
