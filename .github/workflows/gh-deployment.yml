@@ -98,16 +98,16 @@ jobs:
       - name: Create Resource Group
         id: rg
         run: |
-          $resourceGroupName = "${{ inputs.resourceGroupName }}"
-          $deployBaseName = "${{ inputs.deployBaseName || github.repository_owner }}"
+          resourceGroupName="${{ inputs.resourceGroupName }}"
+          deployBaseName="${{ inputs.deployBaseName || github.repository_owner }}"
 
           if [ -z "$resourceGroupName" ]; then
-            rgName="rg-$deployBaseName-cco"
+            rgName="rg-${deployBaseName}-cco"
           else
             rgName="$resourceGroupName"
           fi
 
-          az group create -n $rgName -l ${{ inputs.location }}
+          az group create -n "$rgName" -l "${{ inputs.location }}"
           echo "resourceGroupName=$rgName" >> $GITHUB_OUTPUT
 
       - name: "Deploy infrastructure"
