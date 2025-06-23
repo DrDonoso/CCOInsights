@@ -21,15 +21,16 @@ module registry 'br/public:avm/res/container-registry/registry:0.9.1' = {
 
 // App Service Plan
 module appServicePlan 'br/public:avm/res/web/serverfarm:0.4.1' = {
-  name: '${name}-cco-sp'
+  name: '${name}-cco-gh-sp'
   params: {
-    name: '${name}-cco-sp'
+    name: '${name}-cco-gh-sp'
     location: location
     skuCapacity: 1
     skuName: 'B1'
     tags: {
       version: version
     }
+    kind: 'linux'
   }
 }
 
@@ -84,7 +85,7 @@ module appService 'br/public:avm/res/web/site:0.16.0' = {
         ]
         supportCredentials: false
       }
-      linuxFxVersion: 'DOCKER|mcr.microsoft.com/appsvc/staticsite:latest'
+      linuxFxVersion: 'DOCKER|${registry.outputs.loginServer}/github-metrics:latest'
       minTlsVersion: '1.2'
     }
     configs: [
