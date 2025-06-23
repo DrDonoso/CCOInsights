@@ -144,3 +144,7 @@ module dataLakeStorage 'br/public:avm/res/storage/storage-account:0.20.0' = {
 //     resourceId: dataLakeStorage.outputs.resourceId
 //   }
 // }
+
+
+// Outputs
+output registryLoginServer string = registry.outputs.loginServer

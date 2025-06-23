@@ -82,6 +82,8 @@ jobs:
     name: Deploy infrastructure
     needs: check_changes
     runs-on: ubuntu-latest
+    outputs:
+      registryLoginServer: ${{ steps.set-output.outputs.registryLoginServer }}
     if: (needs.check_changes.outputs.infraModified == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'workflow_dispatch'
     steps:
       - name: "Checkout"
@@ -124,11 +126,49 @@ jobs:
         id: set-output
         run: |
             # Fetching the output from Azure deployment using bash
-            dlsName=$(az deployment group show --resource-group "${{ steps.rg.outputs.resourceGroupName }}" --name "${{ steps.rg.outputs.resourceGroupName }}" --query 'properties.outputs.dataLakeStorageAccountName.value' -o tsv)
+            registryLoginServer=$(az deployment group show --resource-group "${{ steps.rg.outputs.resourceGroupName }}" --name "${{ steps.rg.outputs.resourceGroupName }}" --query 'properties.outputs.registryLoginServer.value' -o tsv)
 
-            echo "DataLakeStorageName: $dlsName"
-            echo "dataLakeStorageName=$dlsName" >> $GITHUB_OUTPUT
+            echo "RegistryLoginServer: $registryLoginServer"
+            echo "registryLoginServer=$registryLoginServer" >> $GITHUB_OUTPUT
 
+  code:
+    name: Deploy code
+    needs: [check_changes, deploy_infra]
+    if: (needs.check_changes.outputs.codeModified == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Get Azure credentials"
+        id: azure-credentials
+        env:
+          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+        run: |
+          echo "Retrieving spnAppId"
+          client_id=$(echo "$AZURE_CREDENTIALS" | jq -r '.clientId')
+          echo "clientId=$client_id" >> $GITHUB_OUTPUT
+
+          echo "Retrieving client secret"
+          clientSecret=$(echo "$AZURE_CREDENTIALS" | jq -r '.clientSecret')
+          echo "clientSecret=$clientSecret" >> $GITHUB_OUTPUT
+
+      - name: Login to ACR
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ needs.deploy_infra.outputs.registryLoginServer }}
+          username: ${{ steps.azure-credentials.outputs.clientId }}
+          password: ${{ steps.azure-credentials.outputs.clientSecret }}
+
+      - name: Docker build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./ghmetrics/src/Dockerfile
+          push: true
+          tags: ${{ needs.deploy_infra.outputs.registryLoginServer }}/github-metrics:latest
 
     # uses: ./.github/workflows/infrastructure.yml 
     # with:
