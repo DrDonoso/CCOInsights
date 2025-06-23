@@ -121,26 +121,26 @@ module dataLakeStorage 'br/public:avm/res/storage/storage-account:0.20.0' = {
   }
 }
 
-module roleAssignment1 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.2' = {
-  name: '${name}-storage-ra'
-  params: {
-    name: guid(name, 'Contributor')
-    principalId: appService.outputs.?systemAssignedMIPrincipalId!
-    roleName: 'Contributor'
-    roleDefinitionId: '/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c' // Contributor role
-    principalType: 'ServicePrincipal'
-    resourceId: dataLakeStorage.outputs.resourceId
-  }
-}
+// module roleAssignment1 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.2' = {
+//   name: '${name}-storage-ra'
+//   params: {
+//     name: guid(name, 'Contributor')
+//     principalId: appService.outputs.?systemAssignedMIPrincipalId!
+//     roleName: 'Contributor'
+//     roleDefinitionId: '/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c' // Contributor role
+//     principalType: 'ServicePrincipal'
+//     resourceId: dataLakeStorage.outputs.resourceId
+//   }
+// }
  
-module roleAssignment2 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.2' = {
-  name: '${name}-storage-ra2'
-  params: {
-    name: guid(resourceGroup().id, 'StorageBlobDataContributor')
-    principalId: appService.outputs.?systemAssignedMIPrincipalId!
-    roleName: 'Contributor'
-    roleDefinitionId: '/providers/Microsoft.Authorization/roleDefinitions/ba92f5b4-2d11-453d-a403-e96b0029c9fe' // Storage Blob Data Contributor role
-    principalType: 'ServicePrincipal'
-    resourceId: dataLakeStorage.outputs.resourceId
-  }
-}
+// module roleAssignment2 'br/public:avm/ptn/authorization/resource-role-assignment:0.1.2' = {
+//   name: '${name}-storage-ra2'
+//   params: {
+//     name: guid(resourceGroup().id, 'StorageBlobDataContributor')
+//     principalId: appService.outputs.?systemAssignedMIPrincipalId!
+//     roleName: 'Contributor'
+//     roleDefinitionId: '/providers/Microsoft.Authorization/roleDefinitions/ba92f5b4-2d11-453d-a403-e96b0029c9fe' // Storage Blob Data Contributor role
+//     principalType: 'ServicePrincipal'
+//     resourceId: dataLakeStorage.outputs.resourceId
+//   }
+// }
