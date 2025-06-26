@@ -166,7 +166,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./ghmetrics/src/Dockerfile
+          file: ./ghmetrics/src/CCOInsights.GitHubMetrics/Dockerfile
           push: true
           tags: ${{ needs.deploy_infra.outputs.registryLoginServer }}/github-metrics:latest
 
