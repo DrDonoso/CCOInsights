@@ -51,7 +51,7 @@ await builder.RunConsoleAsync();
 public class GitHubMetricsExporterJob : IJob
 {
     //public static string CronSchedule = "0 0 10 * * ?"; // Execute daily at 10 AM UTC
-    public static string CronSchedule = "0 * * * * ?"; // Execute every minute
+    public static string CronSchedule = Environment.GetEnvironmentVariable("JOB_GITHUBMETRICS_SCHEDULE"); // Execute every minute
     private readonly ILogger _log;
     private readonly Exporter _exporter;
     private readonly GhExtractor _extractor;
