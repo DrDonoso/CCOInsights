@@ -108,7 +108,7 @@ module appService 'br/public:avm/res/web/site:0.16.0' = {
 }
 
 // Data Lake Storage Account
-module dataLakeStorage 'br/public:avm/res/storage/storage-account:0.20.0' = {
+module dataLakeStorage 'br/public:avm/res/storage/storage-account:0.25.0' = {
   name: !empty(dlsname) ? toLower(dlsname) : toLower('${name}ccodls')
   params: {
     name: !empty(dlsname) ? toLower(dlsname) : toLower('${name}ccodls')
