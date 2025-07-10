@@ -116,6 +116,7 @@ module dataLakeStorage 'br/public:avm/res/storage/storage-account:0.20.0' = {
     enableHierarchicalNamespace: true
     skuName: 'Standard_LRS'
     // publicNetworkAccess: 'Enabled'
+    publicNetworkAccess: 'Disabled' // For security, disable public access
     tags: {
       version: version
     }
